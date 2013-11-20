@@ -51,7 +51,8 @@ class PhpcrOdmTreeTest extends \PHPUnit_Framework_TestCase
             $this->pool,
             $this->translator,
             $this->assetHelper,
-            array()
+            array(),
+            1
         );
 
         $this->assertEquals(
@@ -82,7 +83,8 @@ class PhpcrOdmTreeTest extends \PHPUnit_Framework_TestCase
             $this->pool,
             $this->translator,
             $this->assetHelper,
-            array()
+            array(),
+            1
         );
         $this->assertEquals(
             array('id' => $targetPath, 'url_safe_id' => $urlSafeId),
