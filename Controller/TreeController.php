@@ -54,6 +54,7 @@ class TreeController extends Controller
             $this->template = $template;
         }
         $this->defaults = $defaults;
+
         $this->confirmMove = $confirmMove;
     }
 
@@ -69,9 +70,11 @@ class TreeController extends Controller
     {
         $createInOverlay = $request->attributes->get('create_in_overlay');
         $editInOverlay = $request->attributes->get('edit_in_overlay');
+        $deleteInOverlay = $request->attributes->get('delete_in_overlay');
 
         $root = $request->attributes->get('root');
         $selected = $request->attributes->get('selected') ?: $root;
+
         return $this->render($this->template, array(
             'tree' => $this->tree,
             'root_node' => $root,
@@ -80,6 +83,7 @@ class TreeController extends Controller
             'confirm_move' => $this->confirmMove,
             'create_in_overlay' => $createInOverlay ? $createInOverlay : false,
             'edit_in_overlay' => $editInOverlay ? $editInOverlay : false,
+            'delete_in_overlay' => $deleteInOverlay ? $deleteInOverlay : false,
         ));
     }
 }

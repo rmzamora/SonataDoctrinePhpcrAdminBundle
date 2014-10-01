@@ -12,6 +12,7 @@
 namespace Sonata\DoctrinePHPCRAdminBundle\Admin;
 
 use PHPCR\Util\PathHelper;
+use PHPCR\Util\UUIDHelper;
 use Sonata\AdminBundle\Admin\Admin as BaseAdmin;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -70,20 +71,6 @@ class Admin extends BaseAdmin
     }
 
     /**
-     * @param string $name
-     * @param mixed $object
-     * @param array $parameters
-     * @param boolean $absolute
-     *
-     * @return string
-     */
-    public function generateObjectUrl($name, $object, array $parameters = array(), $absolute = false)
-    {
-        $parameters['id'] = $this->getUrlsafeIdentifier($object);
-        return $this->generateUrl($name, $parameters, $absolute);
-    }
-
-    /**
      * @param object $object
      *
      * @return string
@@ -91,6 +78,31 @@ class Admin extends BaseAdmin
     public function id($object)
     {
         return $this->getUrlsafeIdentifier($object);
+    }
+
+    /**
+     * Get subject
+     *
+     * Overridden to allow a broader set of valid characters in the ID, and
+     * if the ID is not a UUID, to call absolutizePath on the ID.
+     *
+     * @return mixed
+     */
+    public function getSubject()
+    {
+        if ($this->subject === null && $this->request) {
+            $id = $this->request->get($this->getIdParameter());
+            if (!preg_match('#^[0-9A-Za-z/\-_]+$#', $id)) {
+                $this->subject = false;
+            } else {
+                if (!UUIDHelper::isUUID($id)) {
+                    $id = PathHelper::absolutizePath($id, '/');
+                }
+                $this->subject = $this->getModelManager()->find($this->getClass(), $id);
+            }
+        }
+
+        return $this->subject;
     }
 
     /**

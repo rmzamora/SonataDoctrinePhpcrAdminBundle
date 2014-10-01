@@ -26,17 +26,19 @@
         "rmzamora/admin-bundle": "2.3.*@dev",
         "symfony/framework-bundle": "~2.2",
         "symfony/property-access": "~2.2",
-        "doctrine/phpcr-odm":"1.0.*",
-        "doctrine/phpcr-bundle":"1.0.*",
-        "symfony-cmf/tree-browser-bundle": "1.0.*"
+        "doctrine/phpcr-odm": "~1.1",
+        "doctrine/phpcr-bundle": "~1.1",
+        "symfony-cmf/tree-browser-bundle": "~1.0"
     },
     "require-dev": {
-        "jackalope/jackalope-jackrabbit": "dev-master"
+        "jackalope/jackalope-jackrabbit": "~1.0"
+    },
+    "provide": {
+        "sonata-project/admin-bundle-persistency-layer": "1.0.0"
     },
     "autoload": {
-        "psr-0": { "Sonata\\DoctrinePHPCRAdminBundle": "" }
+        "psr-4": { "Sonata\\DoctrinePHPCRAdminBundle\\": "" }
     },
-    "target-dir": "Sonata/DoctrinePHPCRAdminBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "1.2-dev"

@@ -22,14 +22,14 @@ The ``add`` method accepts the arguments :
   - the field type      : the type of widget used to render the value part
   - the field options   : the type options
 
-Filter types available
+Available Filter types
 ----------------------
 
   - doctrine_phpcr_boolean    : depends on the ``sonata_type_filter_default`` Form Type, renders yes or no field as operator
   - doctrine_phpcr_callback   : depends on the ``sonata_type_filter_default`` Form Type, types can be configured as needed
   - doctrine_phpcr_choice     : depends on the ``sonata_type_filter_default`` Form Type, renders operator (contains, not contains, equal) field
   - doctrine_phpcr_string     : depends on the ``doctrine_phpcr_type_filter_choice`` Form Type, renders operator (contains, not contains, equal, contains words) field
-  - doctrine_phpcr_number     : depends on the ``sonata_type_filter_number`` Form Type, renders yes or no field
+  - doctrine_phpcr_number     : depends on the ``sonata_type_filter_number`` Form Type, renders operator (>, >=, <= , <, =, empty, not empty) field
   - doctrine_phpcr_date       : depends on the ``sonata_type_filter_date`` Form Type, renders operator (>, >=, <= , <, =, empty, not empty) field
   - doctrine_phpcr_nodename   : depends on the ``doctrine_phpcr_type_filter_choice`` Form Type, renders operator (contains, not contains, equal, contains words) field
 
@@ -54,7 +54,7 @@ Example
             $datagrid
                 ->add('title')
                 ->add('enabled')
-                ->add('tags', null, array(), null, array('expanded' => true, 'multiple' => true)
+                ->add('tags', null, array(), null, array('expanded' => true, 'multiple' => true))
             ;
         }
     }
@@ -109,7 +109,7 @@ You can customize the label which appears on the main widget by using a ``label`
     {
         $datagrid
             // ..
-            ->add('tags', null, array('label' => 'les tags'), null, array('expanded' => true, 'multiple' => true)
+            ->add('tags', null, array('label' => 'les tags'), null, array('expanded' => true, 'multiple' => true))
             // ..
         ;
     }

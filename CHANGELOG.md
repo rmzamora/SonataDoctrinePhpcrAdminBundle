@@ -1,14 +1,44 @@
 Changelog
 =========
 
+1.2.0-RC1
+---------
+
+* **2014-08-20**: Updated to PSR-4 autoloading
+
+1.1.0
+---------
+
+Release 1.1.0
+
+2014-04-11
+----------
+
+- drop Symfony 2.2 compatibility
+
+1.1.0-RC1
+---------
+
+2014-03-24
+----------
+
+- Updated the dependencies on sonata to use the new SonataCoreBundle.
+
+2014-02-14
+----------
+
+- The tree options confirm_move and depth are now grouped in the configuration
+  `document_tree_options`, plus there is an additional option
+  `precise_children` to further help with flat trees.
+
 1.0.1
 -----
 
 2013-11-12
 ----------
 
- - Added support for the Sonata ACL editor, if that is enabled in the configuration.
-   http://www.sonata-project.org/bundles/admin/master/doc/reference/security.html#acl-editor
+- Added support for the Sonata ACL editor, if that is enabled in the configuration.
+  http://www.sonata-project.org/bundles/admin/master/doc/reference/security.html#acl-editor
 
 1.0.0
 -----

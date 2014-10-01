@@ -84,6 +84,20 @@ class PhpcrOdmTree implements TreeInterface
     private $depth;
 
     /**
+     * Fetch children lazy - enabling this will allow the tree to fetch a larger amount of  children in the tree but less accurate
+     * @var bool
+     */
+    private $preciseChildren;
+
+    /**
+     * The options are
+     *
+     * - depth: Down to what level children should be fetched, currently the
+     *      maximum supported depth is one.
+     * - precise_children: To determine if a tree element has children, check if
+     *      the document has valid children. If false, simply check if the node
+     *      has any child nodes. Less accurate but better performance.
+     *
      * @param DocumentManager $dm
      * @param ModelManager $defaultModelManager to use with documents that have no manager
      * @param Pool $pool to get admin classes for documents from
@@ -93,6 +107,7 @@ class PhpcrOdmTree implements TreeInterface
      *      used as tree "ref" fields
      * $param integer $depth depth to which grand children should be fetched,
      *      currently the maximum depth is one
+     * @param array $options
      */
     public function __construct(
         DocumentManager $dm,
@@ -101,7 +116,7 @@ class PhpcrOdmTree implements TreeInterface
         TranslatorInterface $translator,
         CoreAssetsHelper $assetHelper,
         array $validClasses,
-        $depth = 1
+        array $options
     ) {
         $this->dm = $dm;
         $this->defaultModelManager = $defaultModelManager;
@@ -109,7 +124,9 @@ class PhpcrOdmTree implements TreeInterface
         $this->translator = $translator;
         $this->assetHelper = $assetHelper;
         $this->validClasses = $validClasses;
-        $this->depth = $depth;
+
+        $this->depth = $options['depth'];
+        $this->preciseChildren = $options['precise_children'];
     }
 
     /**
@@ -185,7 +202,7 @@ class PhpcrOdmTree implements TreeInterface
      *
      * @return array
      */
-    private function documentToArray(ModelManager $manager, $document)
+    protected function documentToArray(ModelManager $manager, $document)
     {
         $className = ClassUtils::getClass($document);
 
@@ -207,17 +224,23 @@ class PhpcrOdmTree implements TreeInterface
             $label = PathHelper::getNodeName($label);
         }
 
-        // TODO: this is really the responsibility of the UI
-        if (strlen($label) > 18) {
-            $label = substr($label, 0, 17) . '...';
-        }
-
         // TODO: ideally the tree should simply not make the node clickable
-        $label .= $admin ? '' : ' (not editable)';
+        $label .= $admin ? '' : ' '.$this->translator->trans('not_editable', array(), 'SonataDoctrinePHPCRAdmin');
 
-        // as long as we filter out invalid documents, we need to pass through this logic as a PHPCR node might have children but only invalid ones.
-        // this is quite costly, using the PHPCR node would be a lot more efficient
-        $hasChildren = (bool)count($this->getDocumentChildren($manager, $document));
+        $hasChildren = false;
+        if (isset($this->validClasses[$className]['valid_children'])
+            && count($this->validClasses[$className]['valid_children'])
+        ) {
+            if ($this->preciseChildren) {
+                // determine if a node has children the accurate way. we need to
+                // loop over all documents, as a PHPCR node might have children but
+                // only invalid ones. this is quite costly.
+                $hasChildren = (bool) count($this->getDocumentChildren($manager, $document));
+            } else {
+                // just check if there is any child node
+                $hasChildren = $manager->getDocumentManager()->getNodeForDocument($document)->hasNodes();
+            }
+        }
 
         return array(
             'data'  => $label,
@@ -357,6 +380,8 @@ class PhpcrOdmTree implements TreeInterface
      */
     public function getNodeTypes()
     {
+        $result = array();
+
         foreach ($this->validClasses as $className => $children) {
             $rel = $this->normalizeClassname($className);
             $admin = $this->getAdminByClass($className);
@@ -436,9 +461,9 @@ class PhpcrOdmTree implements TreeInterface
      *
      * @return ModelManager the modelmanager for $document or the default manager
      */
-    private function getModelManager($document)
+    protected function getModelManager($document = NULL)
     {
-        $admin = $this->getAdmin($document);
+        $admin = $document ? $this->getAdmin($document) : NULL;
 
         return $admin ? $admin->getModelManager() : $this->defaultModelManager;
     }
