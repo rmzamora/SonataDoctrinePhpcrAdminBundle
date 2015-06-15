@@ -123,7 +123,7 @@ class DatagridBuilder implements DatagridBuilderInterface
      *
      * @return FilterInterface
      */
-    public function addFilter(DatagridInterface $datagrid, $type = null, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
+    public function addFilter(DatagridInterface $datagrid, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
         if ($type == null) {
             $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName(), $admin->getModelManager());
@@ -148,7 +148,7 @@ class DatagridBuilder implements DatagridBuilderInterface
         $fieldDescription->mergeOption('field_options', array('required' => false));
         $filter = $this->filterFactory->create($fieldDescription->getName(), $type, $fieldDescription->getOptions());
 
-        if (!$filter->getLabel()) {
+        if (false !== $filter->getLabel() && !$filter->getLabel()) {
             $filter->setLabel($admin->getLabelTranslatorStrategy()->getLabel($fieldDescription->getName(), 'filter', 'label'));
         }
 

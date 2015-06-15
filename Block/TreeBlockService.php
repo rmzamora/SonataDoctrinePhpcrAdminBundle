@@ -12,13 +12,12 @@
 namespace Sonata\DoctrinePHPCRAdminBundle\Block;
 
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Validator\ErrorElement;
 use Sonata\BlockBundle\Block\BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TreeBlockService extends BaseBlockService
 {
@@ -62,7 +61,7 @@ class TreeBlockService extends BaseBlockService
     /**
      * {@inheritDoc}
      */
-    public function setDefaultSettings(OptionsResolverInterface $resolver)
+    public function configureSettings(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'template'         => 'SonataDoctrinePHPCRAdminBundle:Block:tree.html.twig',
@@ -70,15 +69,5 @@ class TreeBlockService extends BaseBlockService
             'selected'         => null,
             'routing_defaults' => $this->defaults,
         ));
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * NOOP as we do not edit and hence have nothing to validate.
-     */
-    public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
-    {
-        // there is nothing to validate here
     }
 }

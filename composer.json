@@ -4,7 +4,6 @@
     "description": "Symfony Sonata / Integrate Doctrine PHPCR into the SonataAdminBundle, rmzamora forked",
     "keywords": ["Admin Generator", "admin", "sonata", "bootstrap"],
     "license": "MIT",
-    "minimum-stability": "dev",
     "authors": [
         {
             "name": "mell m. zamora",
@@ -28,7 +27,8 @@
         "symfony/property-access": "~2.2",
         "doctrine/phpcr-odm": "~1.1",
         "doctrine/phpcr-bundle": "~1.1",
-        "symfony-cmf/tree-browser-bundle": "~1.0"
+        "symfony-cmf/tree-browser-bundle": "~2.0",
+        "symfony-cmf/resource-rest-bundle": "~1.0"
     },
     "require-dev": {
         "jackalope/jackalope-jackrabbit": "~1.0"
@@ -36,6 +36,8 @@
     "provide": {
         "sonata-project/admin-bundle-persistency-layer": "1.0.0"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": { "Sonata\\DoctrinePHPCRAdminBundle\\": "" }
     },
